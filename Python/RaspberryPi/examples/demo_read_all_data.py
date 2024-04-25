@@ -61,5 +61,4 @@ print("\n\nPolling:")
 while True:
     if sensor.get_sensor_data():
         print("temperature: {0:.2f} C, pressure: {1:.2f} hPa, humidity: {2:.2f} %RH".format(sensor.data.temperature, sensor.data.pressure, sensor.data.humidity))
-        print(f"gas resistance: {sensor.data.gas_resistance}")
     time.sleep(1)

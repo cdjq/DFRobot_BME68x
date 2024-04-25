@@ -438,7 +438,6 @@ class DFRobot_BME68x(BME68xData):
             self._i2c = smbus.SMBus(1)
 
         self.variant_id = self._get_regs(_BME68X_VARIANT_ID_ADDR, 1)  
-        print("self.variant_id = ", self.variant_id)
 
         self.chip_id = self._get_regs(_BME68X_CHIP_ID_ADDR, 1)
         if self.chip_id != _BME68X_CHIP_ID:
@@ -727,7 +726,6 @@ class DFRobot_BME68x(BME68xData):
         return min(max(calc_hum,0),100000)
 
     def _calc_gas_resistance(self, gas_res_adc, gas_range):
-        print(f"gas_res_adc = {gas_res_adc}        gas_range = {gas_range}")
         var1 = ((1340 + (5 * self.calibration_data.range_sw_err)) * (lookupTable1[gas_range])) >> 16
         var2 = (((gas_res_adc << 15) - (16777216)) + var1)
         var3 = ((lookupTable2[gas_range] * var1) >> 9)
