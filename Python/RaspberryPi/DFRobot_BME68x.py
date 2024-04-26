@@ -641,7 +641,11 @@ class DFRobot_BME68x(BME68xData):
 
             self.data.pressure = self._calc_pressure(adc_pres) / 100.0
             self.data.humidity = self._calc_humidity(adc_hum) / 1000.0
-            self.data.gas_resistance = self._calc_gas_resistance(adc_gas_res, gas_range)
+            if self.variant_id == _BME68X_VARIANT_GAS_HIGHV:
+                self.data.gas_resistance = self._calc_gas_resistance_high(adc_gas_res, gas_range)
+            else:
+                self.data.gas_resistance = self._calc_gas_resistance_low(adc_gas_res, gas_range)
+
             return True
 
         return False
@@ -725,7 +729,7 @@ class DFRobot_BME68x(BME68xData):
 
         return min(max(calc_hum,0),100000)
 
-    def _calc_gas_resistance(self, gas_res_adc, gas_range):
+    def _calc_gas_resistance_low(self, gas_res_adc, gas_range):
         var1 = ((1340 + (5 * self.calibration_data.range_sw_err)) * (lookupTable1[gas_range])) >> 16
         var2 = (((gas_res_adc << 15) - (16777216)) + var1)
         var3 = ((lookupTable2[gas_range] * var1) >> 9)
@@ -735,6 +739,16 @@ class DFRobot_BME68x(BME68xData):
             calc_gas_res = (1<<32) + calc_gas_res
 
         return calc_gas_res
+    
+    def _calc_gas_resistance_high(self, gas_res_adc, gas_range):
+        var1 = (262144) >> gas_range
+        var2 = gas_res_adc - 512
+        var2 *= 3
+        var2 = 4096 + var2
+        calc_gas_res = 1000000 * var1 / var2
+
+        return calc_gas_res*0.5
+
 
     def _calc_heater_resistance(self, temperature):
         temperature = min(max(temperature,200),400)

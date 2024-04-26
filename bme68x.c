@@ -13,18 +13,6 @@
 
 #include "bme68x.h"
 
-/**<static variables */
-/**<Look up table for the possible gas range values */
-uint32_t lookupTable1[16] = { UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2147483647),
-	UINT32_C(2147483647), UINT32_C(2126008810), UINT32_C(2147483647), UINT32_C(2130303777), UINT32_C(2147483647),
-	UINT32_C(2147483647), UINT32_C(2143188679), UINT32_C(2136746228), UINT32_C(2147483647), UINT32_C(2126008810),
-	UINT32_C(2147483647), UINT32_C(2147483647) };
-/**<Look up table for the possible gas range values */
-uint32_t lookupTable2[16] = { UINT32_C(4096000000), UINT32_C(2048000000), UINT32_C(1024000000), UINT32_C(512000000),
-	UINT32_C(255744255), UINT32_C(127110228), UINT32_C(64000000), UINT32_C(32258064), UINT32_C(16016016), UINT32_C(
-		8000000), UINT32_C(4000000), UINT32_C(2000000), UINT32_C(1000000), UINT32_C(500000), UINT32_C(250000),
-	UINT32_C(125000) };
-
 /**
  * @fn get_calib_data
  * @brief This internal API is used to read the calibrated data from the sensor.
@@ -828,21 +816,94 @@ static uint32_t calc_humidity(uint16_t hum_adc, const struct bme68x_dev *dev)
 	return (uint32_t) calc_hum;
 }
 
-uint32_t calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, struct bme68x_dev *dev)
+#ifdef BME68X_USE_FLOAT
+/* This internal API is used to calculate the gas resistance low value in float */
+static float calc_gas_resistance_low(uint16_t gas_res_adc, uint8_t gas_range, const struct bme68x_dev *dev)
+{
+    float calc_gas_res;
+    float var1;
+    float var2;
+    float var3;
+    float gas_res_f = gas_res_adc;
+    float gas_range_f = (1U << gas_range); /*lint !e790 / Suspicious truncation, integral to float */
+    const float lookup_k1_range[16] = {
+        0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -0.8f, 0.0f, 0.0f, -0.2f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f
+    };
+    const float lookup_k2_range[16] = {
+        0.0f, 0.0f, 0.0f, 0.0f, 0.1f, 0.7f, 0.0f, -0.8f, -0.1f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+    };
+
+    var1 = (1340.0f + (5.0f * dev->calib.range_sw_err));
+    var2 = (var1) * (1.0f + lookup_k1_range[gas_range] / 100.0f);
+    var3 = 1.0f + (lookup_k2_range[gas_range] / 100.0f);
+    calc_gas_res = 1.0f / (float)(var3 * (0.000000125f) * gas_range_f * (((gas_res_f - 512.0f) / var2) + 1.0f));
+
+    return calc_gas_res;
+}
+
+/* This internal API is used to calculate the gas resistance value in float */
+static float calc_gas_resistance_high(uint16_t gas_res_adc, uint8_t gas_range)
+{
+    float calc_gas_res;
+    uint32_t var1 = UINT32_C(262144) >> gas_range;
+    int32_t var2 = (int32_t)gas_res_adc - INT32_C(512);
+
+    var2 *= INT32_C(3);
+    var2 = INT32_C(4096) + var2;
+
+    calc_gas_res = 1000000.0f * (float)var1 / (float)var2;
+
+    return calc_gas_res;
+}
+
+#else
+/* This internal API is used to calculate the gas resistance low */
+uint32_t calc_gas_resistance_low(uint16_t gas_res_adc, uint8_t gas_range, const struct bme68x_dev *dev)
 {
 	int64_t var1;
-	uint64_t var2;
-	int64_t var3;
-	uint32_t calc_gas_res;
+    uint64_t var2;
+    int64_t var3;
+    uint32_t calc_gas_res;
+    uint32_t lookup_table1[16] = {
+        UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2147483647), UINT32_C(2147483647),
+        UINT32_C(2126008810), UINT32_C(2147483647), UINT32_C(2130303777), UINT32_C(2147483647), UINT32_C(2147483647),
+        UINT32_C(2143188679), UINT32_C(2136746228), UINT32_C(2147483647), UINT32_C(2126008810), UINT32_C(2147483647),
+        UINT32_C(2147483647)
+    };
+    uint32_t lookup_table2[16] = {
+        UINT32_C(4096000000), UINT32_C(2048000000), UINT32_C(1024000000), UINT32_C(512000000), UINT32_C(255744255),
+        UINT32_C(127110228), UINT32_C(64000000), UINT32_C(32258064), UINT32_C(16016016), UINT32_C(8000000), UINT32_C(
+            4000000), UINT32_C(2000000), UINT32_C(1000000), UINT32_C(500000), UINT32_C(250000), UINT32_C(125000)
+    };
 
-	var1 = (int64_t) ((1340 + (5 * (int64_t) dev->calib.range_sw_err)) *
-		((int64_t) lookupTable1[gas_range])) >> 16;
-	var2 = (((int64_t) ((int64_t) gas_res_adc << 15) - (int64_t) (16777216)) + var1);
-	var3 = (((int64_t) lookupTable2[gas_range] * (int64_t) var1) >> 9);
-	calc_gas_res = (uint32_t) ((var3 + ((int64_t) var2 >> 1)) / (int64_t) var2);
+    /*lint -save -e704 */
+    var1 = (int64_t)((1340 + (5 * (int64_t)dev->calib.range_sw_err)) * ((int64_t)lookup_table1[gas_range])) >> 16;
+    var2 = (((int64_t)((int64_t)gas_res_adc << 15) - (int64_t)(16777216)) + var1);
+    var3 = (((int64_t)lookup_table2[gas_range] * (int64_t)var1) >> 9);
+    calc_gas_res = (uint32_t)((var3 + ((int64_t)var2 >> 1)) / (int64_t)var2);
 
-	return calc_gas_res;
+    /*lint -restore */
+    return calc_gas_res;
 }
+
+/* This internal API is used to calculate the gas resistance */
+uint32_t calc_gas_resistance_high(uint16_t gas_res_adc, uint8_t gas_range)
+{
+	uint32_t calc_gas_res;
+    uint32_t var1 = UINT32_C(262144) >> gas_range;
+    int32_t var2 = (int32_t)gas_res_adc - INT32_C(512);
+
+    var2 *= INT32_C(3);
+    var2 = INT32_C(4096) + var2;
+
+    /* multiplying 10000 then dividing then multiplying by 100 instead of multiplying by 1000000 to prevent overflow */
+    calc_gas_res = (UINT32_C(10000) * var1) / (uint32_t)var2;
+    calc_gas_res = calc_gas_res * 50;
+
+    return calc_gas_res;
+}
+#endif
+
 
 static uint8_t calc_heater_res(uint16_t temp, const struct bme68x_dev *dev)
 {
@@ -943,8 +1004,12 @@ static int8_t read_field_data(struct bme68x_field_data *data, struct bme68x_dev 
 				data->temperature = calc_temperature(adc_temp, dev);
 				data->pressure = calc_pressure(adc_pres, dev);
 				data->humidity = calc_humidity(adc_hum, dev);
-				data->gas_resistance = calc_gas_resistance(adc_gas_res, gas_range, dev);
-																				   
+				if (dev->variant_id == BME68X_VARIANT_GAS_HIGHV)
+				{
+					data->gas_resistance = calc_gas_resistance_high(adc_gas_res, gas_range);
+				}else{
+					data->gas_resistance = calc_gas_resistance_low(adc_gas_res, gas_range, dev);
+				}															   
 				break;
 			}
 			/* Delay to poll the data */

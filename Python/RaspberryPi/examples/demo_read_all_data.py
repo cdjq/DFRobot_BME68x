@@ -4,7 +4,7 @@ from __future__ import print_function
 
 '''!
   @file demo_read_all_data.py
-  @brief connect bme680 I2C interface with your board (please reference board compatibility)
+  @brief connect bme68x I2C interface with your board (please reference board compatibility)
   @n Temprature, Humidity, pressure, altitude, calibrate altitude and gas resistance data will print on serial window.
   @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
   @license     The MIT License (MIT)

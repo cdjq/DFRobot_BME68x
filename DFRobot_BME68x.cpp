@@ -129,7 +129,11 @@ int8_t DFRobot_BME68x::iaqUpdate(void)
     }
     gasADC = (uint16_t) ((uint32_t) gasBuf[0] * 4 | (((uint32_t) gasBuf[1]) / 64));
     gasRange = gasBuf[1] & BME68X_GAS_RANGE_MSK;
-    bme68x_data.gas_resistance = calc_gas_resistance(gasADC, gasRange, &bme68x_sensor);
+    if (bme68x_sensor.variant_id == BME68X_VARIANT_GAS_HIGHV){
+      bme68x_data.gas_resistance = calc_gas_resistance_high(gasADC, gasRange);
+    }else{
+      bme68x_data.gas_resistance = calc_gas_resistance_low(gasADC, gasRange, &bme68x_sensor);
+    }
     return 0;
   }
   return 1;

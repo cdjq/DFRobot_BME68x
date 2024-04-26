@@ -167,7 +167,8 @@ int8_t bme68x_set_sensor_settings(uint16_t desired_settings, struct bme68x_dev *
  */
 int8_t bme68x_get_sensor_settings(uint16_t desired_settings, struct bme68x_dev *dev);
 
-uint32_t calc_gas_resistance(uint16_t gas_res_adc, uint8_t gas_range, struct bme68x_dev *dev);
+uint32_t calc_gas_resistance_low(uint16_t gas_res_adc, uint8_t gas_range, const struct bme68x_dev *dev);
+uint32_t calc_gas_resistance_high(uint16_t gas_res_adc, uint8_t gas_range);
 #ifdef __cplusplus
 }
 #endif 
