@@ -13,7 +13,7 @@
  * @url https://github.com/DFRobot/DFRobot_BME68x
  */
 
-#include "DFRobot_BME68x_SPI.h"
+#include "DFRobot_BME68x.h"
 #include "SPI.h"
 
 #ifdef __AVR__
@@ -35,7 +35,7 @@ void setup()
   uint8_t rslt = 1;
   Serial.begin(9600);
   while(!Serial);
-  delay(5000);
+  delay(1000);
   Serial.println();
   while(rslt != 0) {
     rslt = bme.begin();

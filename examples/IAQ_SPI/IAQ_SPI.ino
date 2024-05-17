@@ -14,7 +14,7 @@
  * @url https://github.com/DFRobot/DFRobot_BME68x
  */
 
-#include "DFRobot_BME68x_SPI.h"
+#include "DFRobot_BME68x.h"
 #include "SPI.h"
 
 /*use an accurate altitude to calibrate sea level air pressure*/
@@ -28,7 +28,7 @@ void setup()
   uint8_t       rslt = 1;
   Serial.begin(115200);
   while(!Serial);
-  delay(5000);
+  delay(1000);
   Serial.println();
   while(rslt != 0) {
     rslt = bme.begin();

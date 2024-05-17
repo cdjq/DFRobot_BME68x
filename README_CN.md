@@ -5,10 +5,10 @@
 BME68x 是专为移动应用和可穿戴设备开发的集成环境传感器其中尺寸和低功耗是关键要求。 BME68x 扩展了 Bosch Sensortec <br>
 现有的环境传感器系列，首次集成了用于气体、压力、湿度和温度的单个高线性度和高精度传感器。<br>
 
-![产品效果图](./resources/images/SEN0248.png) 
+![产品效果图](./resources/images/SEN0617.png) 
 
-## 产品链接（[https://www.dfrobot.com.cn/goods-1621.html](https://www.dfrobot.com.cn/goods-1621.html)）
-    SKU: SEN0248
+## 产品链接(https://www.dfrobot.com.cn)
+    SKU: SEN0617
 
 ## 目录
 

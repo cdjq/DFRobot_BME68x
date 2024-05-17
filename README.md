@@ -6,12 +6,12 @@ BME68x is an integrated environmental sensor developed specifically for mobile a
 where size and low power consumption are key requirements. Expanding Bosch Sensortec’s existing family of environmental sensors, 
 the BME68x integrates for the first time individual high linearity and high accuracy sensors for gas, pressure, humidity and temperature.
 
-![产品效果图](./resources/images/SEN0248.png) 
+![产品效果图](./resources/images/SEN0617.png) 
 
 
 
-## Product Link（[https://www.dfrobot.com/product-1697.html](https://www.dfrobot.com/product-1697.html)）
-    SKU: SEN0248
+## Product Link(https://www.dfrobot.com)
+    SKU: SEN0617
     
 
 ## Table of Contents
