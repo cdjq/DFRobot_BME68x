@@ -17,7 +17,7 @@
 #include "SPI.h"
 
 #ifdef __AVR__
-const uint8_t bme_cs = 3;
+const uint8_t bme_cs = 10;
 #elif ((defined ESP_PLATFORM) || (defined __ets__))
 const uint8_t bme_cs = D3;
 #else
