@@ -102,7 +102,13 @@ return_values_init bsec_iot_init(float sample_rate, float temperature_offset, bm
     uint8_t bsec_config[BSEC_MAX_PROPERTY_BLOB_SIZE] = {0};
     uint8_t work_buffer[BSEC_MAX_PROPERTY_BLOB_SIZE] = {0};
     int bsec_state_len, bsec_config_len;
-    
+    UNUSED(bsec_state_len);
+    UNUSED(work_buffer);
+    UNUSED(bsec_state);
+    UNUSED(bsec_config_len);
+    UNUSED(bsec_config);
+    UNUSED(bsec_status);
+
     /* Fixed I2C configuration */
     bme68x_g.dev_id = addr;
     bme68x_g.intf = intf;
@@ -152,6 +158,8 @@ static uint32_t bme68x_bsec_trigger_measurement(bsec_bme_settings_t *sensor_sett
 	uint16_t meas_period;
 	uint8_t set_required_settings;
     int8_t bme68x_status = BME68X_OK;
+    UNUSED(bme68x_status);
+    UNUSED(sleep);
         
     /* Check if a forced-mode measurement should be triggered now */
     if (sensor_settings->trigger_measurement)
@@ -200,6 +208,7 @@ static void bme68x_bsec_read_data(int64_t time_stamp_trigger, bsec_input_t *inpu
 {
     static struct bme68x_field_data data;
     int8_t bme68x_status = BME68X_OK;
+    UNUSED(bme68x_status);
     
     /* We only have to read data if the previous call the bsec_sensor_control() actually asked for it */
     if (bsec_process_data)
@@ -364,6 +373,12 @@ int8_t bsec_iot_loop(sleep_fct sleep, get_timestamp_us_fct get_timestamp_us, out
     static uint32_t n_samples = 0;
     
     static bsec_library_return_t bsec_status = BSEC_OK;
+    UNUSED(bsec_status);
+    UNUSED(n_samples);
+    UNUSED(bsec_state_len);
+    UNUSED(work_buffer);
+    UNUSED(bsec_state);
+    UNUSED(time_stamp_interval_ms);
 
     static uint32_t waitTime = 0;
     static unsigned long lastTime = 0;

@@ -1,6 +1,6 @@
 /**
  * @file DFRobot_BME68x.cpp
- *
+ * @brief  Defines the infrastructure of the DFRobot_BME68x class and the implementation of the underlying methods
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license     The MIT License (MIT)
  * @author Frank(jiehan.guo@dfrobot.com)
@@ -16,10 +16,17 @@ static struct        bme68x_field_data bme68x_data;
 static uint8_t       convertCmd = (0x05 << 5) | (0x05 << 2) | (0x01);
 static uint8_t       iaqReady_ = 0;
 
+
+
 void bme68x_outputReady(int64_t timestamp, float iaq, uint8_t iaq_accuracy, float temperature,
                         float humidity, float pressure, float raw_temperature, float raw_humidity,
                         float gas, bsec_library_return_t bsec_status)
 {
+  UNUSED(timestamp);
+  UNUSED(raw_temperature);
+  UNUSED(raw_humidity);
+  UNUSED(gas);
+  UNUSED(bsec_status);
   if(iaq_accuracy != 0) bme68x_data.gas_index = iaq;
   bme68x_data.temperature = temperature;
   bme68x_data.humidity = humidity;
@@ -56,7 +63,6 @@ int16_t DFRobot_BME68x::begin(void)
     return -1;
   }
   uint8_t       set_required_settings;
-  int8_t        rslt = 0;
 
 	/* Set the temperature, pressure and humidity settings */
 	bme68x_sensor.tph_sett.os_hum = BME68X_OS_2X;
@@ -74,10 +80,10 @@ int16_t DFRobot_BME68x::begin(void)
    | BME68X_GAS_SENSOR_SEL;
 
   /* Set the desired sensor configuration */
-  rslt = bme68x_set_sensor_settings(set_required_settings, &bme68x_sensor);
+  bme68x_set_sensor_settings(set_required_settings, &bme68x_sensor);
 
 	/* Set the power mode */
-	rslt = bme68x_set_sensor_mode(&bme68x_sensor);
+	bme68x_set_sensor_mode(&bme68x_sensor);
 
 	/* Get the total measurement duration so as to sleep or wait till the
 	 * measurement is complete */
@@ -161,17 +167,6 @@ float DFRobot_BME68x::readIAQ(void)
   return bme68x_data.gas_index;
 }
 
-void DFRobot_BME68x::setParam(eBME68X_param_t eParam, uint8_t dat)
-{
-  if(dat > 0x05) return;
-  switch(eParam) {
-    case eBME68X_PARAM_TEMPSAMP: writeParamHelper(0x74, dat, 0x07 << 5); break;
-    case eBME68X_PARAM_PREESAMP: writeParamHelper(0x74, dat, 0x07 << 2); break;
-    case eBME68X_PARAM_HUMISAMP: writeParamHelper(0x72, dat, 0x07); break;
-    case eBME68X_PARAM_IIRSIZE: writeParamHelper(0x75, dat, 0x07 << 2); break;
-  }
-}
-
 bool DFRobot_BME68x::setGasHeater(uint16_t heaterTemp, uint16_t heaterTime)
 {
   if((heaterTemp == 0) || (heaterTime == 0)){
@@ -250,6 +245,7 @@ static uint8_t bme68x_cs = 0;
 
 static int8_t bme68x_spi_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *data, uint16_t len)
 {
+  UNUSED(dev_id);
   SPI.begin();
   SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(bme68x_cs, 0);
@@ -265,6 +261,7 @@ static int8_t bme68x_spi_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *data, u
 
 static int8_t bme68x_spi_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *data, uint16_t len)
 {
+  UNUSED(dev_id); 
   SPI.begin();
   SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(bme68x_cs, 0);

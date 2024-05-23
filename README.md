@@ -117,14 +117,6 @@ Download the zip file first to use this library and uncompress it to a folder na
    */
   float readIAQ(void);
   /**
-   * @fn setParam
-   * @brief set bme68x parament
-   *
-   * @param eParam        :which param you want to change
-   *        dat           :object data, can't more than 5
-   */  
-  void    setParam(eBME68X_param_t eParam, uint8_t dat);
-  /**
    * @fn setGasHeater
    * @brief set bme68x gas heater
    * @param temp        :your object temp

@@ -19,7 +19,6 @@ update	KEYWORD2
 supportIAQ	KEYWORD2
 iaqUpdate	KEYWORD2
 isIAQReady	KEYWORD2
-setParam	KEYWORD2
 setGasHeater	KEYWORD2
 readTempture	KEYWORD2
 readHumidity	KEYWORD2

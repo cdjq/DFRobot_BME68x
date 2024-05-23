@@ -1,6 +1,6 @@
 /**
  * @file DFRobot_BME68x.h
- *
+ * @brief Defines the infrastructure of the DFRobot_BME68x class
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license     The MIT License (MIT)
  * @author Frank(jiehan.guo@dfrobot.com)
@@ -140,15 +140,6 @@ public:
    */
   float readIAQ(void);
   /**
-   * @fn setParam
-   * @brief set bme68x parament
-   *
-   * @param eParam        :which param you want to change
-   *        dat           :object data, can't more than 5
-   */  
-  void    setParam(eBME68X_param_t eParam, uint8_t dat);
-
-  /**
    * @fn isIAQReady
    * @brief check IAQ ready
    * @return result:
@@ -160,7 +151,7 @@ public:
   /**
    * @fn setGasHeater
    * @brief Set the target temperature of the heating layer and the heating time
-   * @param heaterTeamp :Target temperature of the heating layer (unit: Celsius)
+   * @param heaterTemp :Target temperature of the heating layer (unit: Celsius)
    * @param heaterTime  :The duration of heating (unit: milliseconds)
    * @return result:
    * @retval true :succussful

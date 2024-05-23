@@ -16,7 +16,7 @@ from __future__ import print_function
 '''
 import sys
 sys.path.append('../')
-from Python.RaspberryPi.DFRobot_BME68x import DFRobot_BME68x
+from DFRobot_BME68x import DFRobot_BME68x
 import time
 
 sensor = DFRobot_BME68x()

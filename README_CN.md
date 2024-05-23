@@ -117,14 +117,6 @@ BME68x 是专为移动应用和可穿戴设备开发的集成环境传感器其�
    */
   float readIAQ(void);
   /**
-   * @fn setParam
-   * @brief 设置bme68x的参数
-   *
-   * @param eParam        : 需要设置的参数
-   *        dat           : 对象数据，不能超过5
-   */  
-  void    setParam(eBME68X_param_t eParam, uint8_t dat);
-  /**
    * @fn setGasHeater
    * @brief 设置bme68x燃气加热器
    * @param temp        :目标温度

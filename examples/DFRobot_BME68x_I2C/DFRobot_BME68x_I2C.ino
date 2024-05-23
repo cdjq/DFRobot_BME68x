@@ -49,7 +49,7 @@ void setup()
   Serial.println(seaLevel);
   #endif
 
-  // At initialization, the default heating layer target temperature is 320 and the duration is 150ms
+  // At initialization, the default heating layer target temperature is 320 and the duration is 150ms. The heating layer temperature is modified here.
   bool res = bme.setGasHeater(360, 100);
   
   Serial.print("Set the target temperature of the heating layer and the heating time: ");

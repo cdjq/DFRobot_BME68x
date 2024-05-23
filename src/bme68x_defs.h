@@ -59,6 +59,8 @@
 #endif
 #endif
 
+#define UNUSED(x) (void)(x)
+
 /** BME68X General config */
 #define BME68X_POLL_PERIOD_MS		UINT8_C(10)
 

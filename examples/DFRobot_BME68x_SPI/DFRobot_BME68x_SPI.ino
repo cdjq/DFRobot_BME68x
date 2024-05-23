@@ -16,7 +16,7 @@
 #include "DFRobot_BME68x.h"
 #include "SPI.h"
 
-#ifdef __AVR__
+#if (defined(ARDUINO_SAM_ZERO)|| (defined __AVR__))
 const uint8_t bme_cs = 10;
 #elif ((defined ESP_PLATFORM) || (defined __ets__))
 const uint8_t bme_cs = D3;

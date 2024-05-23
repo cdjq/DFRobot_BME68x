@@ -479,8 +479,8 @@ class DFRobot_BME68x(BME68xData):
 
     def set_humidity_oversample(self, value):
         '''!
-          @brief Set humidity oversampling
-          @param value   Oversampling value, OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
+          @brief        Set humidity oversampling
+          @param value  Oversampling value, OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
         '''
         self.tph_settings.os_hum = value
         self._set_bits(_BME68X_CONF_OS_H_ADDR, _BME68X_OSH_MSK, _BME68X_OSH_POS, value)
@@ -490,8 +490,8 @@ class DFRobot_BME68x(BME68xData):
 
     def set_pressure_oversample(self, value):
         '''!
-          @brief Set temperature oversampling
-          @param value   Oversampling value, OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
+          @brief        Set temperature oversampling
+          @param value  Oversampling value, OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
         '''
         self.tph_settings.os_pres = value
         self._set_bits(_BME68X_CONF_T_P_MODE_ADDR, _BME68X_OSP_MSK, _BME68X_OSP_POS, value)
@@ -501,8 +501,8 @@ class DFRobot_BME68x(BME68xData):
 
     def set_temperature_oversample(self, value):
         '''!
-          @brief Set pressure oversampling
-          @param Oversampling value: OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
+          @brief        Set pressure oversampling
+          @param value  Oversampling value  OS_NONE, OS_1X, OS_2X, OS_4X, OS_8X, OS_16X
         '''
         self.tph_settings.os_temp = value
         self._set_bits(_BME68X_CONF_T_P_MODE_ADDR, _BME68X_OST_MSK, _BME68X_OST_POS, value)
@@ -512,8 +512,8 @@ class DFRobot_BME68x(BME68xData):
 
     def set_filter(self, value):
         '''!
-          @brief Set IIR filter size to remove short term fluctuations from the temperature and pressure readings
-          @param  increasing resolution but reducing bandwidth
+          @brief        Set IIR filter size to remove short term fluctuations from the temperature and pressure readings
+          @param value  increasing resolution but reducing bandwidth
                   FILTER_SIZE_0
                   FILTER_SIZE_1
                   FILTER_SIZE_3
@@ -531,8 +531,8 @@ class DFRobot_BME68x(BME68xData):
 
     def select_gas_heater_profile(self, value):
         '''!
-          @brief Set current gas sensor conversion profile
-          @param value:current gas sensor conversion profile: 0 ~ 9
+          @brief        Set current gas sensor conversion profile
+          @param value  current gas sensor conversion profile: 0 ~ 9
         '''
         if value > _BME68X_NBCONV_MAX or value < _BME68X_NBCONV_MIN:
             raise ValueError("Profile '{}' should be between {} and {}".format(value, _BME68X_NBCONV_MIN, _BME68X_NBCONV_MAX))
@@ -545,8 +545,8 @@ class DFRobot_BME68x(BME68xData):
 
     def set_gas_status(self, value):
         '''!
-          @brief Enable/disable gas sensor
-          @param 1 for enable and 0 for disable
+          @brief        Enable/disable gas sensor
+          @param value  1 for enable and 0 for disable
         '''
         self.gas_settings.run_gas = value
         if self.variant_id == _BME68X_VARIANT_GAS_HIGHV:
@@ -566,8 +566,9 @@ class DFRobot_BME68x(BME68xData):
 
     def set_gas_heater_temperature(self, value, nb_profile=0):
         '''!
-          @brief Set gas sensor heater temperature
-          @param value:target temperature in degrees celsius, between 200 ~ 400
+          @brief            Set gas sensor heater temperature
+          @param value      target temperature in degrees celsius, between 200 ~ 400
+          @param nb_profile configuration information
         '''
         if nb_profile > _BME68X_NBCONV_MAX or value < _BME68X_NBCONV_MIN:
             raise ValueError("Profile '{}' should be between {} and {}".format(nb_profile, _BME68X_NBCONV_MIN, _BME68X_NBCONV_MAX))
@@ -578,8 +579,9 @@ class DFRobot_BME68x(BME68xData):
 
     def set_gas_heater_duration(self, value, nb_profile=0):
         '''!
-          @brief Set gas sensor heater duration
-          @param value:target duration in milliseconds, between 1 ~ 4032
+          @brief            Set gas sensor heater duration
+          @param value      target duration in milliseconds, between 1 ~ 4032
+          @param nb_profile configuration information
         '''
         if nb_profile > _BME68X_NBCONV_MAX or value < _BME68X_NBCONV_MIN:
             raise ValueError("Profile '{}' should be between {} and {}".format(nb_profile, _BME68X_NBCONV_MIN, _BME68X_NBCONV_MAX))
